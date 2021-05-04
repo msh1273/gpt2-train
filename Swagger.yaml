@@ -1,0 +1,64 @@
+openapi: 3.0.0   # Open api version
+
+info:
+  title: GPT2-SpongeBob
+  version: "v0.1"
+  contact:
+    name: AInizer - Lee hoseop
+  description: |
+    This app is generate SpongeBob script as array.
+    ---
+      How to use:
+      * First, Choose SpongeBob character name.
+      * Second, Fill what the character will say in text. This will be base of script.
+      * And then, Fill number in length. Text is created as long as "length". I recommend between 100 and 300.
+      * If length is so big, generate time will be long.
+servers:
+  - url: https://train-gxd8nu9gu9yneay8q19e-gpt2-train-teachable-ainize.endpoint.ainize.ai
+
+paths:
+  /SpongeBob:
+    post:
+      requestBody:
+        required: true
+        description: |
+          This request will generate Spongebob script.
+          Request body example
+              name: name
+              text: Hello world
+              length: 150
+          curl example
+
+              curl -X POST "https://master-gpt2-spongebob-fpem123.endpoint.ainize.ai/SpongeBob" -H "accept: application/json" -H "Content-Type: multipart/form-data" -F "name=SpongeBob" -F "text=Hello" -F "length=100"
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  enum: [SpongeBob, Patrick, Squidward, Sandy, Mr. Krabs, Plankton]
+                  description: "name."
+                text:
+                  type: string
+                  description: "The base of script."
+                length:
+                  type: string
+                  description: "The size of text."
+              required:
+                - name
+                - text
+                - length
+      responses:   # Set response
+        '200':
+          description: "Successful Response"
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: "Bad Request Error"
+        '429':
+          description: "Too many requests"
+        '500':
+          description: "Server-side Error"
